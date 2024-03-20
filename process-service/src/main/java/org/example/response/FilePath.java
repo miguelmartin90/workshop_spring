@@ -1,11 +1,11 @@
 package org.example.response;
 
-public class FileProcess {
+public class FilePath {
 
     private String path;
     private String typeOfFile;
 
-    public FileProcess(String path, String typeOfFile) {
+    public FilePath(String path, String typeOfFile) {
         this.path = path;
         this.typeOfFile = typeOfFile;
     }

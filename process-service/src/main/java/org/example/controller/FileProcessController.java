@@ -1,8 +1,10 @@
 package org.example.controller;
 
-import org.example.response.FileProcess;
-import org.example.service.FileProcessService;
+import org.example.response.CsvPerson;
+import org.example.response.FilePath;
+import org.example.service.CsvFileProcessService;
 import com.opencsv.exceptions.CsvException;
+import org.example.service.ExcelFileProcessService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,40 +14,34 @@ import java.io.IOException;
 @RequestMapping("/api")
 public class FileProcessController {
 
-    private FileProcessService fileReaderService;
+    private CsvFileProcessService csvFileProcessService;
+    private ExcelFileProcessService excelFileProcessService;
 
     @Autowired
-    public FileProcessController(FileProcessService fileReaderService){
-        this.fileReaderService = fileReaderService;
+    public FileProcessController(CsvFileProcessService csvFileProcessService, ExcelFileProcessService excelFileProcessService){
+        this.csvFileProcessService = csvFileProcessService;
+        this.excelFileProcessService = excelFileProcessService;
     }
+/*
+    @Autowired
+    public FileProcessController(ExcelFileProcessService excelFileProcessService) {
+        this.excelFileProcessService = excelFileProcessService;
+    }*/
 
-    @GetMapping("/test")
+    @GetMapping("/test/")
     public String pruebaControllerReader(){
         return "Retorno desde pruebaControllerReader";
     }
 
     @PostMapping("/csv/")
-    public FileProcess csvFileReader(@RequestBody FileProcess fileReader) throws IOException, CsvException {
-        this.fileReaderService.csvFileReader(fileReader);
-        return fileReader;
+    public String csvFileReader(@RequestBody FilePath path) throws IOException, CsvException {
+        this.csvFileProcessService.csvFileReader(path.getPath());
+        return path.getPath();
     }
 
-/*    @PostMapping("/csv")
-    public String csvReader(@RequestParam("file") MultipartFile file) throws IOException, CsvException {
-
-        Reader reader = new InputStreamReader(file.getInputStream());
-
-        // parse CSV
-        CSVReader csvReader = new CSVReaderBuilder(reader).build();
-        List<String[]> rows = csvReader.readAll();
-        System.out.println("hello---------" + rows);
-
-        return "Processed " + rows.size() + " rows!";
-    }*/
-
-   @PostMapping("/excel")
-    public String parseExcel(String cadena) {
-        // parse Excel
-        return cadena + "... Hello";
+   @PostMapping("/excel/")
+    public String excelFileReader(@RequestBody FilePath path) throws IOException {
+        this.excelFileProcessService.excelFileReader(path.getPath());
+        return path.getPath();
     }
 }
