@@ -1,5 +1,8 @@
 package org.example.service;
 
-public class ValidatorService {
+import org.springframework.stereotype.Service;
 
+
+public interface ValidatorService {
+     String testServiceValidator();
 }

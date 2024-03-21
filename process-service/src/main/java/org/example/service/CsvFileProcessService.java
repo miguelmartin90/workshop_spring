@@ -1,26 +1,19 @@
 package org.example.service;
 
-import com.opencsv.CSVParser;
-import org.example.response.CsvPerson;
+import org.example.model.CsvPerson;
 import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvException;
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
-import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @Service
 public class CsvFileProcessService {
 
-    private ModelMapper mapper;
     public List<CsvPerson> csvFileReader(String filePath) throws IOException, CsvException {
 
         CSVReader reader = new CSVReader(new FileReader(filePath));
@@ -46,8 +39,11 @@ public class CsvFileProcessService {
 
         System.out.println("\nTamaño del array...: " + csvPeopleList.size());
 //        fileLinesArray.forEach(fileLine -> System.out.println(Arrays.toString(fileLine)));
-
         return csvPeopleList;
+    }
+
+    public String testServiceFileProcess() {
+        return "Respuesta desde método testServiceFileProcess()";
     }
 }
 

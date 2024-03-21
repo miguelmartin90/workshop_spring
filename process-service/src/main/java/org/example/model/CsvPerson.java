@@ -1,4 +1,4 @@
-package org.example.response;
+package org.example.model;
 
 public class CsvPerson {
 

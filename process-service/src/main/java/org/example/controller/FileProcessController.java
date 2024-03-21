@@ -1,7 +1,6 @@
 package org.example.controller;
 
-import org.example.response.CsvPerson;
-import org.example.response.FilePath;
+import org.example.model.FilePath;
 import org.example.service.CsvFileProcessService;
 import com.opencsv.exceptions.CsvException;
 import org.example.service.ExcelFileProcessService;
@@ -28,9 +27,9 @@ public class FileProcessController {
         this.excelFileProcessService = excelFileProcessService;
     }*/
 
-    @GetMapping("/test/")
-    public String pruebaControllerReader(){
-        return "Retorno desde pruebaControllerReader";
+    @GetMapping("/test")
+    public String testServiceFileProcess(){
+        return csvFileProcessService.testServiceFileProcess();
     }
 
     @PostMapping("/csv/")
