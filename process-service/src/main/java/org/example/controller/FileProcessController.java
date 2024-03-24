@@ -1,5 +1,6 @@
 package org.example.controller;
 
+import org.example.client.IServiceComValidator;
 import org.example.model.FilePath;
 import org.example.service.CsvFileProcessService;
 import com.opencsv.exceptions.CsvException;
@@ -10,16 +11,18 @@ import org.springframework.web.bind.annotation.*;
 import java.io.IOException;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/process")
 public class FileProcessController {
 
     private CsvFileProcessService csvFileProcessService;
     private ExcelFileProcessService excelFileProcessService;
+    private IServiceComValidator serviceComValidator;
 
     @Autowired
-    public FileProcessController(CsvFileProcessService csvFileProcessService, ExcelFileProcessService excelFileProcessService){
+    public FileProcessController(CsvFileProcessService csvFileProcessService, ExcelFileProcessService excelFileProcessService, IServiceComValidator serviceComValidator){
         this.csvFileProcessService = csvFileProcessService;
         this.excelFileProcessService = excelFileProcessService;
+        this.serviceComValidator = serviceComValidator;
     }
 /*
     @Autowired
@@ -31,6 +34,12 @@ public class FileProcessController {
     public String testServiceFileProcess(){
         return csvFileProcessService.testServiceFileProcess();
     }
+
+    @GetMapping("/test-validator")
+    public String testServiceValidator(){
+        return serviceComValidator.testServiceValidator();
+    }
+
 
     @PostMapping("/csv/")
     public String csvFileReader(@RequestBody FilePath path) throws IOException, CsvException {

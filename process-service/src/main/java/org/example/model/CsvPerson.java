@@ -1,5 +1,6 @@
 package org.example.model;
-
+import com.opencsv.bean.CsvBindByPosition;
+import com.opencsv.bean.CsvToBeanBuilder;
 public class CsvPerson {
 
     private String index;
@@ -11,8 +12,9 @@ public class CsvPerson {
     private String phone;
     private String dateOfBirth;
     private String jobTitle;
+    private String jobTitle2;
 
-    public CsvPerson(String index, String userId, String firstName, String lastName, String sex, String email, String phone, String dateOfBirth, String jobTitle) {
+    public CsvPerson(String index, String userId, String firstName, String lastName, String sex, String email, String phone, String dateOfBirth, String jobTitle, String jobTitle2) {
         this.index = index;
         this.userId = userId;
         this.firstName = firstName;
@@ -22,6 +24,7 @@ public class CsvPerson {
         this.phone = phone;
         this.dateOfBirth = dateOfBirth;
         this.jobTitle = jobTitle;
+        this.jobTitle2 = jobTitle2;
     }
 
     public String getIndex() {
@@ -94,5 +97,29 @@ public class CsvPerson {
 
     public void setJobTitle(String jobTitle) {
         this.jobTitle = jobTitle;
+    }
+
+    public String getJobTitle2() {
+        return jobTitle2;
+    }
+
+    public void setJobTitle2(String jobTitle2) {
+        this.jobTitle2 = jobTitle2;
+    }
+
+    @Override
+    public String toString() {
+        return "CsvPerson{" +
+                "index='" + index + '\'' +
+                ", userId='" + userId + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", sex='" + sex + '\'' +
+                ", email='" + email + '\'' +
+                ", phone='" + phone + '\'' +
+                ", dateOfBirth='" + dateOfBirth + '\'' +
+                ", jobTitle='" + jobTitle + '\'' +
+                ", jobTitle2='" + jobTitle2 + '\'' +
+                '}';
     }
 }

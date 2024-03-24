@@ -20,6 +20,12 @@ public class ValidatorController {
 
     @GetMapping("/test")
     public String testServiceValidator(){
-        return validatorService.testServiceValidator();
+        return "Response Validator: desde testServiceValidator()";
     }
+
+    @GetMapping("/test-process")
+    public String testProcessFile(){
+        return validatorService.testProcessFile();
+    }
+
 }
