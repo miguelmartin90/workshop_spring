@@ -22,7 +22,6 @@ public class CsvFileProcessService {
         dataCsv.forEach(fileLine -> System.out.println(Arrays.toString(fileLine)));
         System.out.println("\nTamaño del array...: " + dataCsv.size());
 
-
         List<CsvPerson> csvPeopleList = dataCsv.stream()
                 .skip(1)
                 .map(row -> {
