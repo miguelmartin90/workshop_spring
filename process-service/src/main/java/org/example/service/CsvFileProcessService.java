@@ -1,10 +1,14 @@
 package org.example.service;
 
 import com.opencsv.bean.CsvToBeanBuilder;
+import org.example.client.IServiceComValidator;
 import org.example.model.CsvPerson;
 import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvException;
+import org.example.model.FilePath;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.io.FileReader;
 import java.io.IOException;
@@ -15,6 +19,20 @@ import java.util.stream.Collectors;
 @Service
 public class CsvFileProcessService {
 
+    private IServiceComValidator serviceComValidator;
+    private final FilePath file = new FilePath();
+
+    @Autowired
+    public CsvFileProcessService(IServiceComValidator serviceComValidator) {
+        this.serviceComValidator = serviceComValidator;
+    }
+
+    /*public CsvFileProcessService(IServiceComValidator serviceComValidator) {
+        this.serviceComValidator = serviceComValidator;
+    }*/
+
+    List<CsvPerson> csvPeopleList;
+
     public List<CsvPerson> csvFileReader(String filePath) throws IOException, CsvException {
 
         CSVReader reader = new CSVReader(new FileReader(filePath));
@@ -22,7 +40,7 @@ public class CsvFileProcessService {
         dataCsv.forEach(fileLine -> System.out.println(Arrays.toString(fileLine)));
         System.out.println("\nTamaño del array...: " + dataCsv.size());
 
-        List<CsvPerson> csvPeopleList = dataCsv.stream()
+        csvPeopleList = dataCsv.stream()
                 .skip(1)
                 .map(row -> {
                         String index = row[0];
@@ -40,13 +58,24 @@ public class CsvFileProcessService {
                 })
                 .collect(Collectors.toList());
 
-        /*for(CsvPerson i: csvPeopleList){
-            System.out.println(i);
-        }*/
-
 //        System.out.println("\nTamaño del array...: " + csvPeopleList.size());
 //        fileLinesArray.forEach(fileLine -> System.out.println(Arrays.toString(fileLine)));
+//        return csvPeopleList.forEach(CsvPerson::new);
         return csvPeopleList;
+    }
+
+    public void validatedLinesCounter(boolean validatedLine){
+        if (validatedLine){
+            file.setLineValid();
+        } else {
+            file.setLineInvalid();
+        }
+    }
+    public FilePath sendObject(List<CsvPerson> csvPeopleList){
+        for(CsvPerson person: csvPeopleList){
+            validatedLinesCounter(serviceComValidator.csvLineValidator(person));
+        }
+        return file;
     }
 
     public String testServiceFileProcess() {

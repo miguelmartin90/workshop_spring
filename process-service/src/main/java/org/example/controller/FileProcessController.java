@@ -1,6 +1,7 @@
 package org.example.controller;
 
 import org.example.client.IServiceComValidator;
+import org.example.model.CsvPerson;
 import org.example.model.FilePath;
 import org.example.service.CsvFileProcessService;
 import com.opencsv.exceptions.CsvException;
@@ -40,11 +41,19 @@ public class FileProcessController {
         return serviceComValidator.testServiceValidator();
     }
 
+    @PostMapping("/json")
+    public boolean testResponseJsonValidator(@RequestBody CsvPerson csvPerson){
+        return serviceComValidator.testResponseJsonValidator(csvPerson);
+    }
 
     @PostMapping("/csv/")
-    public String csvFileReader(@RequestBody FilePath path) throws IOException, CsvException {
-        this.csvFileProcessService.csvFileReader(path.getPath());
-        return path.getPath();
+    public FilePath csvFileReader(@RequestBody FilePath path) throws IOException, CsvException {
+        /*csvFileProcessService.csvFileReader(path.getPath());
+        return path.getPath();*/
+//        return serviceComValidator.csvLineValidator(csvFileProcessService.csvFileReader(path.getPath()));
+        return csvFileProcessService.sendObject(
+                        csvFileProcessService.csvFileReader(path.getPath())
+        );
     }
 
    @PostMapping("/excel/")

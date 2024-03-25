@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @Primary
-public class ValidatorComService implements ValidatorService {
+public class ValidatorComService{
 
     private IServicesComFileProcess servicesComFileProcess;
 
@@ -15,9 +15,9 @@ public class ValidatorComService implements ValidatorService {
     public ValidatorComService(IServicesComFileProcess servicesComFileProcess) {
         this.servicesComFileProcess = servicesComFileProcess;
     }
-
-    @Override
     public String testProcessFile() {
         return servicesComFileProcess.testServiceFileProcess();
     }
+
+
 }

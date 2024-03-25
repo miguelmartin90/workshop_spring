@@ -1,9 +1,6 @@
 package org.example.model;
-import com.opencsv.bean.CsvBindByPosition;
-import com.opencsv.bean.CsvToBeanBuilder;
-public class CsvPerson {
 
-    CsvPerson person;
+public class CsvPersonOnValidator {
 
     private String index;
     private String userId;
@@ -16,11 +13,7 @@ public class CsvPerson {
     private String jobTitle;
     private String jobTitle2;
 
-    public CsvPerson(CsvPerson person){
-        this.person = person;
-    }
-
-    public CsvPerson(String index, String userId, String firstName, String lastName, String sex, String email, String phone, String dateOfBirth, String jobTitle, String jobTitle2) {
+    public CsvPersonOnValidator(String index, String userId, String firstName, String lastName, String sex, String email, String phone, String dateOfBirth, String jobTitle, String jobTitle2) {
         this.index = index;
         this.userId = userId;
         this.firstName = firstName;

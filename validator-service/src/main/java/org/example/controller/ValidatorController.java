@@ -1,10 +1,9 @@
 package org.example.controller;
 
+import org.example.model.CsvPersonOnValidator;
 import org.example.service.ValidatorService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/validator")
@@ -28,4 +27,13 @@ public class ValidatorController {
         return validatorService.testProcessFile();
     }
 
+    @PostMapping("/json")
+    boolean testResponseJsonValidator(@RequestBody CsvPersonOnValidator csvPerson){
+        return validatorService.testResponseJsonValidator(csvPerson);
+    }
+
+    @PostMapping("/csv-validator/")
+    boolean validatorCsvObject(@RequestBody CsvPersonOnValidator csvPerson){
+        return validatorService.validatorCsvObject(csvPerson);
+    }
 }
