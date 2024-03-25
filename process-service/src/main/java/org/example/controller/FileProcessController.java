@@ -2,7 +2,7 @@ package org.example.controller;
 
 import org.example.client.IServiceComValidator;
 import org.example.model.CsvPerson;
-import org.example.model.FilePath;
+import org.example.model.FileMetadata;
 import org.example.service.CsvFileProcessService;
 import com.opencsv.exceptions.CsvException;
 import org.example.service.ExcelFileProcessService;
@@ -47,17 +47,17 @@ public class FileProcessController {
     }
 
     @PostMapping("/csv/")
-    public FilePath csvFileReader(@RequestBody FilePath path) throws IOException, CsvException {
+    public FileMetadata csvFileReader(@RequestBody FileMetadata path) throws IOException, CsvException {
         /*csvFileProcessService.csvFileReader(path.getPath());
         return path.getPath();*/
 //        return serviceComValidator.csvLineValidator(csvFileProcessService.csvFileReader(path.getPath()));
         return csvFileProcessService.sendObject(
-                        csvFileProcessService.csvFileReader(path.getPath())
+                csvFileProcessService.csvFileReader(path.getPath())
         );
     }
 
    @PostMapping("/excel/")
-    public String excelFileReader(@RequestBody FilePath path) throws IOException {
+    public String excelFileReader(@RequestBody FileMetadata path) throws IOException {
         this.excelFileProcessService.excelFileReader(path.getPath());
         return path.getPath();
     }

@@ -1,44 +1,36 @@
 package org.example.service;
 
-import com.opencsv.bean.CsvToBeanBuilder;
 import org.example.client.IServiceComValidator;
 import org.example.model.CsvPerson;
 import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvException;
-import org.example.model.FilePath;
+import org.example.model.FileMetadata;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
 public class CsvFileProcessService {
 
-    private IServiceComValidator serviceComValidator;
-    private final FilePath file = new FilePath();
+    private final IServiceComValidator serviceComValidator;
+    private final FileMetadata file = new FileMetadata();
+    List<CsvPerson> csvPeopleList;
 
     @Autowired
     public CsvFileProcessService(IServiceComValidator serviceComValidator) {
         this.serviceComValidator = serviceComValidator;
     }
 
-    /*public CsvFileProcessService(IServiceComValidator serviceComValidator) {
-        this.serviceComValidator = serviceComValidator;
-    }*/
-
-    List<CsvPerson> csvPeopleList;
-
     public List<CsvPerson> csvFileReader(String filePath) throws IOException, CsvException {
 
         CSVReader reader = new CSVReader(new FileReader(filePath));
         List<String[]> dataCsv = reader.readAll();
-        dataCsv.forEach(fileLine -> System.out.println(Arrays.toString(fileLine)));
-        System.out.println("\nTamaño del array...: " + dataCsv.size());
+//        dataCsv.forEach(fileLine -> System.out.println(Arrays.toString(fileLine)));
+//        System.out.println("\nTamaño del array...: " + dataCsv.size());
 
         csvPeopleList = dataCsv.stream()
                 .skip(1)
@@ -57,10 +49,6 @@ public class CsvFileProcessService {
 
                 })
                 .collect(Collectors.toList());
-
-//        System.out.println("\nTamaño del array...: " + csvPeopleList.size());
-//        fileLinesArray.forEach(fileLine -> System.out.println(Arrays.toString(fileLine)));
-//        return csvPeopleList.forEach(CsvPerson::new);
         return csvPeopleList;
     }
 
@@ -71,7 +59,7 @@ public class CsvFileProcessService {
             file.setLineInvalid();
         }
     }
-    public FilePath sendObject(List<CsvPerson> csvPeopleList){
+    public FileMetadata sendObject(List<CsvPerson> csvPeopleList){
         for(CsvPerson person: csvPeopleList){
             validatedLinesCounter(serviceComValidator.csvLineValidator(person));
         }
