@@ -1,5 +1,5 @@
 # Work shop Spring
-Workshop que valida si un html está bien formateado.
+Workshop que valida archivos csv y excel. De acuerdo a unos criterios retorna un objeto con líneas válidas e inválidas.
 
 **Grupo:**
 ```
