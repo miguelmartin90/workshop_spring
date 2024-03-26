@@ -29,8 +29,6 @@ public class CsvFileProcessService {
 
         CSVReader reader = new CSVReader(new FileReader(filePath));
         List<String[]> dataCsv = reader.readAll();
-//        dataCsv.forEach(fileLine -> System.out.println(Arrays.toString(fileLine)));
-//        System.out.println("\nTamaño del array...: " + dataCsv.size());
 
         csvPeopleList = dataCsv.stream()
                 .skip(1)
@@ -52,16 +50,10 @@ public class CsvFileProcessService {
         return csvPeopleList;
     }
 
-    public void validatedLinesCounter(boolean validatedLine){
-        if (validatedLine){
-            file.setLineValid();
-        } else {
-            file.setLineInvalid();
-        }
-    }
-    public FileMetadata sendObject(List<CsvPerson> csvPeopleList){
+
+    public FileMetadata sendCsvObject(List<CsvPerson> csvPeopleList){
         for(CsvPerson person: csvPeopleList){
-            validatedLinesCounter(serviceComValidator.csvLineValidator(person));
+            file.validatedLinesCounter(serviceComValidator.csvLineValidator(person));
         }
         return file;
     }

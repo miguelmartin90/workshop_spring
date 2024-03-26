@@ -10,9 +10,7 @@ public class FileMetadata {
     private String path;
     private String typeOfFile;
 
-    @JsonView()
     private int validLines = 0;
-    @JsonView()
     private int invalidLines = 0;
 
     public FileMetadata() {
@@ -48,5 +46,13 @@ public class FileMetadata {
 
     public void setTypeOfFile(String typeOfFile) {
         this.typeOfFile = typeOfFile;
+    }
+
+    public void validatedLinesCounter(boolean validatedLine){
+        if (validatedLine){
+            this.setLineValid();
+        } else {
+            this.setLineInvalid();
+        }
     }
 }

@@ -1,7 +1,9 @@
 package org.example.controller;
 
 import org.example.model.CsvPersonOnValidator;
-import org.example.service.ValidatorService;
+import org.example.model.ExcelSafetyDataOnValidator;
+import org.example.service.ExcelValidatorService;
+import org.example.service.CsvValidatorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,11 +13,13 @@ import java.text.ParseException;
 @RequestMapping("/validator")
 public class ValidatorController {
 
-    private final ValidatorService validatorService;
+    private final CsvValidatorService csvValidatorService;
+    private final ExcelValidatorService excelValidatorService;
 
     @Autowired
-    public ValidatorController(ValidatorService validatorService) {
-        this.validatorService = validatorService;
+    public ValidatorController(CsvValidatorService csvValidatorService, ExcelValidatorService excelValidatorService) {
+        this.csvValidatorService = csvValidatorService;
+        this.excelValidatorService = excelValidatorService;
     }
 
     @GetMapping("/test")
@@ -25,16 +29,21 @@ public class ValidatorController {
 
     @GetMapping("/test-process")
     public String testProcessFile(){
-        return validatorService.testProcessFile();
+        return csvValidatorService.testProcessFile();
     }
 
     @PostMapping("/json")
     boolean testResponseJsonValidator(@RequestBody CsvPersonOnValidator csvPerson){
-        return validatorService.testResponseJsonValidator(csvPerson);
+        return csvValidatorService.testResponseJsonValidator(csvPerson);
     }
 
-    @PostMapping("/csv-validator/")
+    @PostMapping("/csv")
     boolean validatorCsvObject(@RequestBody CsvPersonOnValidator csvPerson) throws ParseException {
-        return validatorService.validatorCsvObject(csvPerson);
+        return csvValidatorService.validatorCsvObject(csvPerson);
+    }
+
+    @PostMapping("/excel")
+    boolean validatorXlsxObject(@RequestBody ExcelSafetyDataOnValidator excelSafetyData){
+        return excelValidatorService.validatorExcelObject(excelSafetyData);
     }
 }

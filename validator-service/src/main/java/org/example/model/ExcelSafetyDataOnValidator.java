@@ -1,6 +1,6 @@
 package org.example.model;
 
-public class ExcelSafetyData {
+public class ExcelSafetyDataOnValidator {
 
     private String Date;
     private String injuryLocation;
@@ -17,10 +17,10 @@ public class ExcelSafetyData {
     private String month;
     private String year;
 
-    public ExcelSafetyData() {
+    public ExcelSafetyDataOnValidator() {
     }
 
-    public ExcelSafetyData(String injuryLocation, String reportType) {
+    public ExcelSafetyDataOnValidator(String injuryLocation, String reportType) {
         this.injuryLocation = injuryLocation;
         this.reportType = reportType;
     }

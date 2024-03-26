@@ -1,6 +1,7 @@
 package org.example.client;
 
 import org.example.model.CsvPerson;
+import org.example.model.ExcelSafetyData;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,6 +16,9 @@ public interface IServiceComValidator {
     @PostMapping("/validator/json")
     boolean testResponseJsonValidator(@RequestBody CsvPerson csvPerson);
 
-    @PostMapping("/validator/csv-validator/")
+    @PostMapping("/validator/csv")
     boolean csvLineValidator(@RequestBody CsvPerson csvPerson);
+
+    @PostMapping("/validator/excel")
+    boolean excelLineValidator(@RequestBody ExcelSafetyData csvPerson);
 }
