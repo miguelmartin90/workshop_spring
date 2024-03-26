@@ -40,7 +40,7 @@ public class FileProcessController {
     @PostMapping("/json")
     public boolean testResponseJsonValidator(@RequestBody CsvPerson csvPerson){
         return serviceComValidator.testResponseJsonValidator(csvPerson);
-    }
+    }/*
 
     @PostMapping("/csv")
     public FileMetadata csvFileReader(@RequestBody FileMetadata file) throws IOException, CsvException {
@@ -53,7 +53,7 @@ public class FileProcessController {
     public String excelFileReader(@RequestBody FileMetadata file) throws IOException {
         this.excelFileProcessService.excelFileReader(file.getPath());
         return file.getPath();
-    }
+    }*/
 
     @PostMapping("/file")
     private FileMetadataDTO fileReader(@RequestBody FileMetadata file){
