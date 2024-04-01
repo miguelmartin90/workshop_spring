@@ -1,4 +1,4 @@
-package org.example.client;
+package org.example.feignCommunication;
 
 import org.example.model.CsvPerson;
 import org.example.model.ExcelSafetyData;

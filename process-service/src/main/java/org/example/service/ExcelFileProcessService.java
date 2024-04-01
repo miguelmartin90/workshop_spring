@@ -5,7 +5,7 @@ import org.apache.poi.ss.usermodel.DataFormatter;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.example.client.IServiceComValidator;
+import org.example.feignCommunication.IServiceComValidator;
 import org.example.model.ExcelSafetyData;
 import org.example.model.FileMetadata;
 import org.springframework.beans.factory.annotation.Autowired;

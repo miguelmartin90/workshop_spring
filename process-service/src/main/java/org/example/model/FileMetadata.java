@@ -2,9 +2,11 @@ package org.example.model;
 
 
 import com.fasterxml.jackson.annotation.JsonView;
+import org.springframework.stereotype.Service;
 
 import javax.swing.text.View;
 
+@Service
 public class FileMetadata {
 
     private String path;
@@ -55,4 +57,6 @@ public class FileMetadata {
             this.setLineInvalid();
         }
     }
+
+
 }

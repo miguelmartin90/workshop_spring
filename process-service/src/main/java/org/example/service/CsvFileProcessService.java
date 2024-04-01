@@ -1,10 +1,11 @@
 package org.example.service;
 
-import org.example.client.IServiceComValidator;
+import org.example.feignCommunication.IServiceComValidator;
 import org.example.model.CsvPerson;
 import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvException;
 import org.example.model.FileMetadata;
+import org.example.producer.ReaderRequestPublisher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,11 +19,13 @@ public class CsvFileProcessService {
 
     private final IServiceComValidator serviceComValidator;
     private final FileMetadata file = new FileMetadata();
+    private final ReaderRequestPublisher readerRequestPublisher;
     List<CsvPerson> csvPeopleList;
 
     @Autowired
-    public CsvFileProcessService(IServiceComValidator serviceComValidator) {
+    public CsvFileProcessService(IServiceComValidator serviceComValidator, ReaderRequestPublisher readerRequestPublisher) {
         this.serviceComValidator = serviceComValidator;
+        this.readerRequestPublisher = readerRequestPublisher;
     }
 
     public List<CsvPerson> csvFileReader(String filePath) throws IOException, CsvException {
@@ -56,6 +59,12 @@ public class CsvFileProcessService {
             file.validatedLinesCounter(serviceComValidator.csvLineValidator(person));
         }
         return file;
+    }
+
+    public void sendCsvObjectWithRabbit(List<CsvPerson> csvPeopleList){
+        for(CsvPerson person: csvPeopleList){
+            readerRequestPublisher.produceOrder(person);
+        }
     }
 
     public String testServiceFileProcess() {

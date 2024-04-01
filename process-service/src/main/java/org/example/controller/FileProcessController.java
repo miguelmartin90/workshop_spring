@@ -1,16 +1,17 @@
 package org.example.controller;
 
-import org.example.client.IServiceComValidator;
+import org.example.consumer.ReaderResponseConsumer;
+import org.example.feignCommunication.IServiceComValidator;
 import org.example.model.CsvPerson;
 import org.example.model.FileMetadata;
 import org.example.dto.FileMetadataDTO;
 import org.example.service.CsvFileProcessService;
-import com.opencsv.exceptions.CsvException;
 import org.example.service.ExcelFileProcessService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
 @RestController
 @RequestMapping("/process")
@@ -19,12 +20,15 @@ public class FileProcessController {
     private final CsvFileProcessService csvFileProcessService;
     private final ExcelFileProcessService excelFileProcessService;
     private final IServiceComValidator serviceComValidator;
+    private final FileMetadata fileMetadata = new FileMetadata();
+    private ReaderResponseConsumer readerResponseConsumer;
 
     @Autowired
-    public FileProcessController(CsvFileProcessService csvFileProcessService, ExcelFileProcessService excelFileProcessService, IServiceComValidator serviceComValidator){
+    public FileProcessController(CsvFileProcessService csvFileProcessService, ExcelFileProcessService excelFileProcessService, IServiceComValidator serviceComValidator, ReaderResponseConsumer readerResponseConsumer){
         this.csvFileProcessService = csvFileProcessService;
         this.excelFileProcessService = excelFileProcessService;
         this.serviceComValidator = serviceComValidator;
+        this.readerResponseConsumer = readerResponseConsumer;
     }
 
     @GetMapping("/test")
@@ -77,4 +81,26 @@ public class FileProcessController {
         return new FileMetadataDTO(file.getValidLines(), file.getInvalidLines());
     }
 
+    @PostMapping("/file-rabbit")
+    private FileMetadataDTO fileReaderRabbit(@RequestBody FileMetadata file) throws ExecutionException, InterruptedException {
+
+        String path = file.getPath();
+        String typeOfFile = file.getTypeOfFile();
+        try {
+            if ("csv".equalsIgnoreCase(typeOfFile)) {
+                csvFileProcessService.sendCsvObjectWithRabbit(
+                        csvFileProcessService.csvFileReader(path));
+
+            } /*else if ("xlsx".equalsIgnoreCase(typeOfFile) || "xls".equalsIgnoreCase(typeOfFile)) {
+        excelFileProcessService.sendExcelObject(
+                excelFileProcessService.excelFileReader(path)
+        );
+    }*/
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        //return "\n--> Retorno desde endpoint /file-rabbit";
+        return new FileMetadataDTO( file.getValidLines(), file.getInvalidLines() );
+    }
 }
