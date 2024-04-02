@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 
 import javax.swing.text.View;
 
-@Service
+
 public class FileMetadata {
 
     private String path;

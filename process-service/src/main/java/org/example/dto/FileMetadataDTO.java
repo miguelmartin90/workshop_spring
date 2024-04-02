@@ -5,6 +5,9 @@ public class FileMetadataDTO {
     private int validLines;
     private int invalidLines;
 
+    public FileMetadataDTO() {
+    }
+
     public FileMetadataDTO(int validLines, int invalidLines) {
         this.validLines = validLines;
         this.invalidLines = invalidLines;

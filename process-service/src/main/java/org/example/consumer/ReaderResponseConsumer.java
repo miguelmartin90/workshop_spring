@@ -19,7 +19,7 @@ import java.util.concurrent.CompletableFuture;
 @Component
 public class ReaderResponseConsumer {
 
-    private final FileMetadata fileMetadata = new FileMetadata();
+    public FileMetadata fileMetadata = new FileMetadata();
     CompletableFuture<FileMetadataDTO> future;
 
     @Autowired

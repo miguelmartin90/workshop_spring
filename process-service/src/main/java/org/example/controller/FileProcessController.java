@@ -10,6 +10,7 @@ import org.example.service.ExcelFileProcessService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.File;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
@@ -20,7 +21,7 @@ public class FileProcessController {
     private final CsvFileProcessService csvFileProcessService;
     private final ExcelFileProcessService excelFileProcessService;
     private final IServiceComValidator serviceComValidator;
-    private final FileMetadata fileMetadata = new FileMetadata();
+    //private final FileMetadata fileMetadata = new FileMetadata();
     private ReaderResponseConsumer readerResponseConsumer;
 
     @Autowired
@@ -84,6 +85,7 @@ public class FileProcessController {
     @PostMapping("/file-rabbit")
     private FileMetadataDTO fileReaderRabbit(@RequestBody FileMetadata file) throws ExecutionException, InterruptedException {
 
+
         String path = file.getPath();
         String typeOfFile = file.getTypeOfFile();
         try {
@@ -100,7 +102,18 @@ public class FileProcessController {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+
+        try {
+            //Ponemos a "Dormir" el programa durante los ms que queremos
+            Thread.sleep(4*1000);
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+
         //return "\n--> Retorno desde endpoint /file-rabbit";
-        return new FileMetadataDTO( file.getValidLines(), file.getInvalidLines() );
+        return new FileMetadataDTO(
+                readerResponseConsumer.fileMetadata.getValidLines(),
+                readerResponseConsumer.fileMetadata.getInvalidLines()
+        );
     }
 }
