@@ -1,17 +1,19 @@
 package org.example.dto;
 
+
 public class FileMetadataDTO {
 
     private int validLines;
     private int invalidLines;
 
-    public FileMetadataDTO() {
-    }
-
     public FileMetadataDTO(int validLines, int invalidLines) {
         this.validLines = validLines;
         this.invalidLines = invalidLines;
     }
+
+    /*public FileMetadataDTO fileMetadataDTO() {
+        return new FileMetadataDTO(validLines, invalidLines);
+    }*/
 
     public int getValidLines() {
         return validLines;

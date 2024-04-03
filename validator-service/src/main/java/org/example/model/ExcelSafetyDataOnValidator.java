@@ -1,6 +1,7 @@
 package org.example.model;
 
-public class ExcelSafetyDataOnValidator {
+
+public class ExcelSafetyDataOnValidator{
 
     private String Date;
     private String injuryLocation;

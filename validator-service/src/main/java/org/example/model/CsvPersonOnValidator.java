@@ -1,6 +1,7 @@
 package org.example.model;
 
-public class CsvPersonOnValidator {
+
+public class CsvPersonOnValidator{
 
     private String index;
     private String userId;

@@ -10,7 +10,6 @@ import org.example.service.ExcelFileProcessService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.File;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
@@ -21,21 +20,24 @@ public class FileProcessController {
     private final CsvFileProcessService csvFileProcessService;
     private final ExcelFileProcessService excelFileProcessService;
     private final IServiceComValidator serviceComValidator;
-    //private final FileMetadata fileMetadata = new FileMetadata();
-    private ReaderResponseConsumer readerResponseConsumer;
+    private final ReaderResponseConsumer readerResponseConsumer;
+
+    private FileMetadataDTO fileMetadataDto;
+    private FileMetadata fileMetadata;
 
     @Autowired
-    public FileProcessController(CsvFileProcessService csvFileProcessService, ExcelFileProcessService excelFileProcessService, IServiceComValidator serviceComValidator, ReaderResponseConsumer readerResponseConsumer){
+    public FileProcessController(CsvFileProcessService csvFileProcessService, ExcelFileProcessService excelFileProcessService, IServiceComValidator serviceComValidator, ReaderResponseConsumer readerResponseConsumer, FileMetadata fileMetadata){
         this.csvFileProcessService = csvFileProcessService;
         this.excelFileProcessService = excelFileProcessService;
         this.serviceComValidator = serviceComValidator;
         this.readerResponseConsumer = readerResponseConsumer;
+        this.fileMetadata = fileMetadata;
     }
 
-    @GetMapping("/test")
+   /* @GetMapping("/test")
     public String testServiceFileProcess(){
         return csvFileProcessService.testServiceFileProcess();
-    }
+    }*/
 
     @GetMapping("/test-validator")
     public String testServiceValidator(){
@@ -45,22 +47,9 @@ public class FileProcessController {
     @PostMapping("/json")
     public boolean testResponseJsonValidator(@RequestBody CsvPerson csvPerson){
         return serviceComValidator.testResponseJsonValidator(csvPerson);
-    }/*
-
-    @PostMapping("/csv")
-    public FileMetadata csvFileReader(@RequestBody FileMetadata file) throws IOException, CsvException {
-        return csvFileProcessService.sendCsvObject(
-                csvFileProcessService.csvFileReader(file.getPath())
-        );
     }
 
-   @PostMapping("/excel")
-    public String excelFileReader(@RequestBody FileMetadata file) throws IOException {
-        this.excelFileProcessService.excelFileReader(file.getPath());
-        return file.getPath();
-    }*/
-
-    @PostMapping("/file")
+    @PostMapping("/file-feign")
     private FileMetadataDTO fileReader(@RequestBody FileMetadata file){
         String path = file.getPath();
         String typeOfFile = file.getTypeOfFile();
@@ -84,36 +73,33 @@ public class FileProcessController {
 
     @PostMapping("/file-rabbit")
     private FileMetadataDTO fileReaderRabbit(@RequestBody FileMetadata file) throws ExecutionException, InterruptedException {
-
+        CompletableFuture<Void> future = new CompletableFuture<>();
 
         String path = file.getPath();
         String typeOfFile = file.getTypeOfFile();
         try {
             if ("csv".equalsIgnoreCase(typeOfFile)) {
                 csvFileProcessService.sendCsvObjectWithRabbit(
-                        csvFileProcessService.csvFileReader(path));
+                csvFileProcessService.csvFileReader(path));
 
-            } /*else if ("xlsx".equalsIgnoreCase(typeOfFile) || "xls".equalsIgnoreCase(typeOfFile)) {
-        excelFileProcessService.sendExcelObject(
+            } else if ("xlsx".equalsIgnoreCase(typeOfFile) || "xls".equalsIgnoreCase(typeOfFile)) {
+                excelFileProcessService.sendExcelObjectWithRabbit(
                 excelFileProcessService.excelFileReader(path)
-        );
-    }*/
-
+                );
+            }
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
 
         try {
-            //Ponemos a "Dormir" el programa durante los ms que queremos
-            Thread.sleep(4*1000);
+            Thread.sleep(8*1000);
         } catch (Exception e) {
             System.out.println(e);
         }
 
-        //return "\n--> Retorno desde endpoint /file-rabbit";
         return new FileMetadataDTO(
-                readerResponseConsumer.fileMetadata.getValidLines(),
-                readerResponseConsumer.fileMetadata.getInvalidLines()
+                fileMetadata.getValidLines(),
+                fileMetadata.getInvalidLines()
         );
     }
 }

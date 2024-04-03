@@ -8,6 +8,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.example.feignCommunication.IServiceComValidator;
 import org.example.model.ExcelSafetyData;
 import org.example.model.FileMetadata;
+import org.example.producer.ReaderRequestPublisher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,10 +29,12 @@ public class ExcelFileProcessService {
     private List<ExcelSafetyData> excelSafetyData;
     List<String[]> dataXlsx = new ArrayList<>();
     private final FileMetadata file = new FileMetadata();
+    private final ReaderRequestPublisher readerRequestPublisher;
 
     @Autowired
-    public ExcelFileProcessService(IServiceComValidator serviceComValidator) {
+    public ExcelFileProcessService(IServiceComValidator serviceComValidator, ReaderRequestPublisher readerRequestPublisher) {
         this.serviceComValidator = serviceComValidator;
+        this.readerRequestPublisher = readerRequestPublisher;
     }
 
     public List<ExcelSafetyData> excelFileReader(String filePath) throws IOException {
@@ -79,10 +82,16 @@ public class ExcelFileProcessService {
     }
 
     public FileMetadata sendExcelObject(List<ExcelSafetyData> excelSafetyDataList){
-        for(ExcelSafetyData excelSafetyData1: excelSafetyDataList){
-            file.validatedLinesCounter(serviceComValidator.excelLineValidator(excelSafetyData1));
+        for(ExcelSafetyData excelSafetyData: excelSafetyDataList){
+            file.validatedLinesCounter(serviceComValidator.excelLineValidator(excelSafetyData));
         }
         return file;
+    }
+
+    public void sendExcelObjectWithRabbit(List<ExcelSafetyData> excelSafetyDataList){
+        for(ExcelSafetyData excelSafetyData: excelSafetyDataList){
+            readerRequestPublisher.produceOrder(excelSafetyData);
+        }
     }
 }
 

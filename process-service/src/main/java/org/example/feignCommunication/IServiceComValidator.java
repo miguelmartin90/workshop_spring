@@ -21,4 +21,5 @@ public interface IServiceComValidator {
 
     @PostMapping("/validator/excel")
     boolean excelLineValidator(@RequestBody ExcelSafetyData csvPerson);
+
 }
